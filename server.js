@@ -1,1 +1,1 @@
-console.log("kz server started"); setInterval(() => {}, 1000);
+console.log("deploy check 1773912190"); setInterval(() => {}, 1000);
