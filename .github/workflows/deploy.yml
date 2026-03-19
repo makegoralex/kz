@@ -44,18 +44,14 @@ jobs:
             fi
 
             echo "=== Build (if exists) ==="
-            if grep -q '"build"' package.json; then
-              npm run build
-            else
-              echo "build script not found, skip"
-            fi
+            npm run build --if-present
 
             echo "=== PM2 restart ==="
             if [ -f ecosystem.config.js ]; then
               pm2 startOrReload ecosystem.config.js --update-env
             elif [ -f ecosystem.config.cjs ]; then
               pm2 startOrReload ecosystem.config.cjs --update-env
-            elif grep -q '"start"' package.json; then
+            elif [ -f package.json ]; then
               if pm2 describe kz > /dev/null 2>&1; then
                 pm2 restart kz --update-env
               else
