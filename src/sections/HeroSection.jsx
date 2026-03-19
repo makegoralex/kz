@@ -23,10 +23,10 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="max-w-4xl text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl"
+          className="max-w-4xl text-4xl font-black leading-tight text-cyan-100 sm:text-5xl lg:text-6xl"
         >
           AGGREGATOR 24/7 <br />
-          <span className="bg-gradient-to-r from-cyan-300 to-violet-400 bg-clip-text text-transparent">IT-услуги по всему Казахстану</span>
+          <span className="inline-block bg-gradient-to-r from-cyan-300 via-sky-300 to-violet-400 bg-clip-text text-transparent">Ремонт, продажа и IT-обслуживание техники</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -34,7 +34,7 @@ export default function HeroSection() {
           transition={{ duration: 0.75, delay: 0.1 }}
           className="mt-6 max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg"
         >
-          Ремонт оргтехники, разработка сайтов, приложений и комплексные IT-решения для бизнеса и частных клиентов. Быстро, надежно, современно.
+          Ремонт ноутбуков, принтеров и оргтехники, продажа оборудования для офиса, установка и настройка программ, поддержка бухгалтерского ПО, разработка сайтов и приложений, IT-сопровождение бизнеса.
         </motion.p>
         <div className="mt-8">
           <ContactButtons phoneHref={contacts.telLinks[0]} waHref={contacts.waLinks[0]} />

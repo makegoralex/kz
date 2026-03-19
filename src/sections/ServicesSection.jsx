@@ -7,7 +7,11 @@ export default function ServicesSection() {
     <section id="services" className="px-4 py-16 sm:px-6">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <SectionTitle eyebrow="Что делаем" title="Наши услуги" subtitle="Практичные IT-услуги для бизнеса и частных клиентов: от технической поддержки до разработки цифровых решений." />
+          <SectionTitle
+            eyebrow="Что делаем"
+            title="Наши услуги"
+            subtitle="Основной фокус — ремонт и обслуживание оргтехники, продажа оборудования, установка программ и поддержка бухгалтерского ПО. Дополнительно реализуем цифровые проекты: сайты, приложения и комплексное IT-сопровождение."
+          />
         </Reveal>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((service, index) => {
