@@ -26,25 +26,39 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
 
+            echo "=== Root files ==="
+            ls -la
+
+            echo "=== Backend files ==="
+            ls -la /var/www/kz/backend || true
+
+            echo "=== Frontend files ==="
+            ls -la /var/www/kz/frontend || true
+
             echo "=== Backend install ==="
-            if [ -f backend/package-lock.json ]; then
+            if [ -f backend/package.json ]; then
               cd /var/www/kz/backend
-              npm ci
-            elif [ -f backend/package.json ]; then
-              cd /var/www/kz/backend
-              npm install
+              cat package.json
+
+              if [ -f package-lock.json ]; then
+                npm ci || npm install
+              else
+                npm install
+              fi
             else
               echo "backend not found, skip"
             fi
 
             echo "=== Frontend install/build ==="
-            if [ -f frontend/package-lock.json ]; then
+            if [ -f frontend/package.json ]; then
               cd /var/www/kz/frontend
-              npm ci
-              npm run build
-            elif [ -f frontend/package.json ]; then
-              cd /var/www/kz/frontend
-              npm install
+
+              if [ -f package-lock.json ]; then
+                npm ci || npm install
+              else
+                npm install
+              fi
+
               npm run build
             else
               echo "frontend not found, skip"
