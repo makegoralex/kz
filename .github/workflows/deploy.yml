@@ -17,5 +17,42 @@ jobs:
           username: root
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            set -e
+
             cd /var/www/kz
-            git pull
+
+            echo "=== Git sync ==="
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "=== Backend install ==="
+            if [ -f backend/package-lock.json ]; then
+              cd /var/www/kz/backend
+              npm ci
+            elif [ -f backend/package.json ]; then
+              cd /var/www/kz/backend
+              npm install
+            fi
+
+            echo "=== Frontend install/build ==="
+            if [ -f frontend/package-lock.json ]; then
+              cd /var/www/kz/frontend
+              npm ci
+              npm run build
+            elif [ -f frontend/package.json ]; then
+              cd /var/www/kz/frontend
+              npm install
+              npm run build
+            fi
+
+            echo "=== PM2 restart ==="
+            cd /var/www/kz
+            if pm2 describe kz-backend > /dev/null 2>&1; then
+              pm2 restart kz-backend
+            else
+              pm2 start ecosystem.config.cjs
+            fi
+
+            pm2 save
+
+            echo "=== Done ==="
