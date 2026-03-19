@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: deploy-kz
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -29,54 +33,44 @@ jobs:
             echo "=== Root files ==="
             ls -la
 
-            echo "=== Backend files ==="
-            ls -la /var/www/kz/backend || true
-
-            echo "=== Frontend files ==="
-            ls -la /var/www/kz/frontend || true
-
-            echo "=== Backend install ==="
-            if [ -f backend/package.json ]; then
-              cd /var/www/kz/backend
-              cat package.json
-
-              if [ -f package-lock.json ]; then
-                npm ci || npm install
-              else
-                npm install
-              fi
+            echo "=== Install dependencies ==="
+            if [ -f package-lock.json ]; then
+              npm ci || npm install
+            elif [ -f package.json ]; then
+              npm install
             else
-              echo "backend not found, skip"
+              echo "package.json not found"
+              exit 1
             fi
 
-            echo "=== Frontend install/build ==="
-            if [ -f frontend/package.json ]; then
-              cd /var/www/kz/frontend
-
-              if [ -f package-lock.json ]; then
-                npm ci || npm install
-              else
-                npm install
-              fi
-
+            echo "=== Build (if exists) ==="
+            if grep -q '"build"' package.json; then
               npm run build
             else
-              echo "frontend not found, skip"
+              echo "build script not found, skip"
             fi
 
             echo "=== PM2 restart ==="
-            if [ -f /var/www/kz/backend/package.json ]; then
-              cd /var/www/kz/backend
-
-              if pm2 describe kz-backend > /dev/null 2>&1; then
-                pm2 restart kz-backend
+            if [ -f ecosystem.config.js ]; then
+              pm2 startOrReload ecosystem.config.js --update-env
+            elif [ -f ecosystem.config.cjs ]; then
+              pm2 startOrReload ecosystem.config.cjs --update-env
+            elif grep -q '"start"' package.json; then
+              if pm2 describe kz > /dev/null 2>&1; then
+                pm2 restart kz --update-env
               else
-                pm2 start npm --name kz-backend -- start
+                pm2 start npm --name kz -- start
               fi
-
-              pm2 save
+            elif [ -f server.js ]; then
+              if pm2 describe kz > /dev/null 2>&1; then
+                pm2 restart kz --update-env
+              else
+                pm2 start server.js --name kz
+              fi
             else
-              echo "backend package.json not found, skip pm2"
+              echo "nothing to run with pm2, skip"
             fi
+
+            pm2 save || true
 
             echo "=== Done ==="
