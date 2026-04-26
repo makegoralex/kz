@@ -94,14 +94,36 @@ h3 {
   font-weight: 600;
 }
 
+h4 {
+  font-size: 1.2rem;
+  line-height: 1.25;
+}
+
 .lead {
-  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  font-size: clamp(1.1rem, 2.2vw, 1.45rem);
   line-height: 1.5;
   color: #e5f4e8;
 }
 
+.note {
+  color: #ddf1e1;
+  font-size: 1rem;
+}
+
 .big {
   font-size: clamp(1.4rem, 2.7vw, 2rem);
+  font-weight: 600;
+}
+
+.section-text {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  max-width: 70ch;
+}
+
+.accent-text {
+  color: #2d6f40;
   font-weight: 600;
 }
 
@@ -145,13 +167,9 @@ h3 {
 }
 
 .visual {
-  min-height: 7.5rem;
+  min-height: 8.5rem;
   align-content: end;
   background: linear-gradient(150deg, #ffffff, #f1f8f2);
-}
-
-.stat h4 {
-  font-size: 1.45rem;
 }
 
 ul {
@@ -197,6 +215,7 @@ ul {
   color: #eff9f0;
 }
 
+.screen-final .section-text,
 .screen-final .big {
   color: #eff9f0;
 }
